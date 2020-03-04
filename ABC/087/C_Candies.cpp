@@ -5,7 +5,7 @@ int N;
 int max_count = 0;
 vector<vector<int>> field;
 
-void search(int y, int x, int sum)
+void search(int y, int x, int sum, vector<vector<int>> field)
 {
     if (y == 1 && x == N - 1)
     {
@@ -18,12 +18,11 @@ void search(int y, int x, int sum)
 
     if (x + 1 < N)
     {
-        search(y, x + 1, sum + field[y][x + 1]);
+        search(y, x + 1, sum + field[y][x + 1], field);
     }
-
     if (y == 0)
     {
-        search(1, x, sum + field[1][x]);
+        search(1, x, sum + field[1][x], field);
     }
 
     return;
@@ -32,7 +31,7 @@ void search(int y, int x, int sum)
 int main()
 {
     cin >> N;
-    vector<vector<int>> field(2, vector<int>(N));
+    vector<vector<int>> field(2, vector<int>(N, 0));
     for (int i = 0; i < 2; i++)
     {
         for (int j = 0; j < N; j++)
@@ -41,7 +40,7 @@ int main()
         }
     }
 
-    search(0, 0, field[0][0]);
+    search(0, 0, field[0][0], field);
 
     cout << max_count;
     return 0;
