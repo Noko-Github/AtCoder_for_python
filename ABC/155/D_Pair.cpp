@@ -24,10 +24,10 @@ int main(void)
             ll tot = 0;
             for (int i = 0; i < N; i++)
             {
+                int left = -1;
+                int right = N;
                 if (a[i] < 0)
                 {
-                    int left = -1;
-                    int right = N;
                     while (left + 1 < right)
                     {
                         int middle = (left + right) / 2;
@@ -41,8 +41,6 @@ int main(void)
                 else
                 {
 
-                    int left = -1;
-                    int right = N;
                     while (left + 1 < right)
                     {
                         int middle = (left + right) / 2;
