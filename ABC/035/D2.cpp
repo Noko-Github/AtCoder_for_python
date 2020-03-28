@@ -3,13 +3,12 @@
 using namespace std;
 using P = pair<int, int>;
 using ll = long long;
-const int INF = 1e+9;
+const int INF = 100000000;
 
-const int MAX_N = 100000;
+const int MAX_N = 100005;
 
-vector<int> dijkstra(int N, vector<P> G[], int s)
+void dijkstra(vector<int> &dist, vector<P> G[], int s)
 {
-    vector<int> dist(N, INF);
     bool fixed[MAX_N] = {false};
     priority_queue<P, vector<P>, greater<P>> que;
 
@@ -25,31 +24,24 @@ vector<int> dijkstra(int N, vector<P> G[], int s)
         if (fixed[t])
             continue;
         fixed[t] = true;
-        if (dist[t] < d)
-            continue;
 
         for (P e : G[t])
         {
             int to, cost;
             tie(to, cost) = e;
-            if (dist[to] > dist[t] + cost)
-            {
-                dist[to] = dist[t] + cost;
-                que.push(P(to, dist[to]));
-            }
+            dist[to] = min(dist[to], dist[t] + cost);
+            que.push(e);
         }
     }
-
-    return dist;
 }
 
 int main()
 {
-    ll N, M;
+    int N, M;
     ll T;
     cin >> N >> M >> T;
 
-    long long A[N];
+    int A[N];
     rep(i, N) cin >> A[i];
 
     vector<P> G[MAX_N];
@@ -64,13 +56,17 @@ int main()
         G[a].push_back(P(b, c));
         r_G[b].push_back(P(a, c));
     }
-    vector<int> d = dijkstra(N, G, 0);
-    vector<int> r_d = dijkstra(N, r_G, 0);
+    vector<int> d(N, INF);
+    vector<int> r_d(N, INF);
+
+    dijkstra(d, G, 0);
+    dijkstra(r_d, r_G, 0);
 
     ll ans = 0;
     rep(i, N)
     {
-        ans = max(ans, (T - d[i] - r_d[i]) * A[i]);
+        ll tot = A[i] * (T - d[i] - r_d[i]);
+        ans = max(ans, tot);
     }
 
     cout << ans << endl;

@@ -14,12 +14,13 @@ int main()
     rep(i, H) cin >> field[i];
 
     vector<vector<int>> dist(H, vector<int>(W, -1));
-    vector<vector<P>> prev(H, vector<P>(W, P(-1, -1)));
+    vector<vector<P>> prev(H, vector<P>(W));
 
     int sy, sx = 0;
     queue<P> que;
     que.push(P(sy, sx));
     dist[sy][sx] = 0;
+    prev[0][0] = P(-1, -1);
     while (!que.empty())
     {
         int y, x;
@@ -53,6 +54,7 @@ int main()
         short_root.push_back(d);
         tie(y, x) = prev[y][x];
     }
+
     // for (int y = 0; y < H; y++)
     // {
     //     for (int x = 0; x < W; x++)
@@ -92,7 +94,15 @@ int main()
             }
         }
     }
-    cout << ans - 1 << endl;
+    if (dist[H - 1][W - 1] == -1)
+    {
+        cout << -1 << endl;
+    }
+    else
+    {
+
+        cout << ans - 1 << endl;
+    }
 
     return 0;
 }

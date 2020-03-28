@@ -16,7 +16,8 @@ int main()
     rep(i, n) cin >> a[i];
     rep(i, n) a[i]--;
 
-    vector<int> cnt(n);
+    int cnt[n];
+    fill_n(cnt, n, 0);
     rep(i, n) cnt[a[i]]++;
     ll tot = 0;
     rep(i, n) tot += comb(cnt[i]);
