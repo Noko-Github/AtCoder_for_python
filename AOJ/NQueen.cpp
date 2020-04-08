@@ -15,9 +15,7 @@ bool check(int row, int col)
         if (col == rows[k])
             return false;
         // 対角線のチェック
-        if (abs(row + col) == abs(rows[k] + k))
-            return false;
-        if ((row - col == k - rows[k]) || (col - row == rows[k] - k))
+        if (row + col == rows[k] + k || row - col == k - rows[k])
             return false;
     }
 
