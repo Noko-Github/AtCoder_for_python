@@ -1,61 +1,62 @@
-#include <bits/stdc++.h>
+#include <bits/stdc++.h> // サイズはマイナスなので慎重に
 using namespace std;
-
-const int OTHERS = 0;
-const int FRIEND = 1;
-const int BLOCK = -1;
+using ll = long long;
+using P = pair<int, int>;
 
 struct UnionFind
 {
     vector<int> d;
-    UnionFind(int n = 0)
-    {
-        d = vector<int>(n, -1);
-    }
+    UnionFind(int n = 0) : d(n, -1) {} // すべて根でサイズは1
     int find(int x)
     {
         if (d[x] < 0)
-        {
             return x;
-        }
-
-        return d[x] = find(d[x]);
+        d[x] = find(d[x]); // メモ化
+        return d[x];
     }
 
     bool unite(int x, int y)
     {
         x = find(x);
-        y = find(y);
+        y = find(y); // 根同士を連結する
         if (x == y)
-            return false;
-        if (d[x] > d[y])
+            return false; // 同じ根なら何もしない
+        if (d[x] > d[y])  // サイズはマイナスなので慎重に
             swap(x, y);
         d[x] += d[y];
         d[y] = x;
         return true;
     }
 
-    bool same(int x, int y) { return find(x) == find(y); }
-    int size(int x) { return -d[find(x)]; }
+    bool same(int x, int y)
+    {
+        if (find(x) == find(y))
+            return true;
+        return false;
+    }
+
+    int size(int x)
+    {
+        return -d[find(x)];
+    }
 };
 
-int deg[100005];
-vector<int> to[100005];
-int main(void)
+int deg[1000005];
+vector<int> to[1000005];
+int main()
 {
     int n, m, k;
     cin >> n >> m >> k;
     UnionFind uf(n);
-
     for (int i = 0; i < m; i++)
     {
         int a, b;
         cin >> a >> b;
         --a;
         --b;
-        uf.unite(a, b);
         deg[a]++;
         deg[b]++;
+        uf.unite(a, b);
     }
 
     for (int i = 0; i < k; i++)
@@ -74,11 +75,10 @@ int main(void)
         for (int u : to[i])
         {
             if (uf.same(i, u))
-            {
                 --ans;
-            }
         }
-        cout << ans << " ";
+        printf("%d%c", ans, i == n - 1 ? '\n' : ' ');
     }
+
     return 0;
 }
