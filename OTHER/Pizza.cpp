@@ -22,6 +22,7 @@ int main()
         cin >> distance;
         stores.push_back(distance);
     }
+    stores.push_back(d);
 
     sort(stores.begin(), stores.end());
     ll ans = 0;
@@ -30,16 +31,30 @@ int main()
         ll d2t;
         cin >> d2t;
 
-        int left, right;
-        left = 0;
-        right = n - 1;
-        int mean = 0;
-        ll tot = INF;
-        while (left <= right)
+        int ok, ng;
+        ok = -1;
+        ng = n;
+        while (ok + 1 < ng)
         {
-            mean = (left + right) / 2;
+            ll mean = (ok + ng) / 2;
+            // if (d2t == stores[mean])
+            // {
+            //     tot = 0;
+            //     break;
+            // }
             // ここに処理を書く
+            if (stores[mean] < d2t)
+            {
+                ok = mean;
+            }
+            else
+            {
+                ng = mean;
+            }
+            // tot = min(tot, abs(d2t - stores[right]));
         }
+        // cout << "tot is " << tot << endl;
+        ans += min(abs(d2t - stores[ok]), abs(d2t - stores[ng]));
     }
 
     cout << ans << endl;
