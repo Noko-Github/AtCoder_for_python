@@ -2,32 +2,31 @@
 using namespace std;
 using ll = long long;
 
-vector<ll> prime_count;
 int main()
 {
-    ll N, TMP;
-    cin >> N;
+    ll n;
+    cin >> n;
 
-    TMP = N;
-    for (ll i = 2; i * i < TMP; i++)
+    ll limit = n;
+    vector<ll> ans;
+    for (ll i = 2; i * i < limit; i++)
     {
-        // 約数判定
-        while (N % i == 0)
+        while (n % i == 0)
         {
-            N = N / i;
-            prime_count.push_back(i);
+            n = n / i;
+            ans.push_back(i);
         }
     }
-
-    if (N != 1)
+    if (n > 1)
     {
-        prime_count.push_back(N);
+        ans.push_back(n);
     }
 
-    cout << TMP << ":";
-    for (ll prime : prime_count)
+    cout << limit << ":";
+    for (ll value : ans)
     {
-        cout << " " << prime;
+        cout << " " << value;
     }
     cout << endl;
+    return 0;
 }
