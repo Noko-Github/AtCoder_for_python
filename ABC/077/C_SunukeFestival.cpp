@@ -8,7 +8,7 @@ ll b_search(ll N, ll S[], ll target)
     ll ok = -1;
     ll ng = N;
 
-    while (ok + 1 < ng)
+    while (abs(ok - ng) > 1)
     {
         ll mid = (ok + ng) / 2;
         if (S[mid] >= target)

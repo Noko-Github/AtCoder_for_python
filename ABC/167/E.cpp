@@ -46,13 +46,13 @@ int main()
     for (int x = n - 1; x >= 0; --x)
     {
         int now = col;
-        now *= nCk(n - 1, x);
-        now = now % MOD;
         if (x <= k)
         {
+            now *= nCk(n - 1, x);
+            now = now % MOD;
             ans += now;
+            ans = ans % MOD;
         }
-        ans = ans % MOD;
         col *= m - 1;
     }
     cout << ans % MOD << endl;

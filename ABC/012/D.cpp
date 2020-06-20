@@ -1,51 +1,61 @@
 #include <bits/stdc++.h>
 using namespace std;
+using ll = long long;
 
-vector<vector<int>> perm;
-const int INF = 100000000;
+int N, M;
+const ll INF = 100000000000;
 
 int main()
 {
-    int N, M;
     cin >> N >> M;
-    perm = vector<vector<int>>(N, vector<int>(N, INF));
+    ll dist[N][N];
+
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            dist[i][j] = INF;
+        }
+    }
 
     for (int i = 0; i < M; i++)
     {
-        int a, b, t;
-        cin >> a >> b >> t;
+        int a, b, cost;
+        cin >> a >> b >> cost;
         a--;
         b--;
-        perm[a][b] = perm[b][a] = min(perm[a][b], t);
+        dist[a][b] = cost;
+        dist[b][a] = cost;
     }
 
     for (int i = 0; i < N; i++)
     {
-        perm[i][i] = 0;
+        dist[i][i] = 0;
     }
 
+    // ワーシャルフロイド
     for (int k = 0; k < N; k++)
     {
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
             {
-                perm[i][j] = min(perm[i][j], perm[i][k] + perm[k][j]);
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
             }
         }
     }
 
-    int max_t = INF;
+    ll ans = INF;
     for (int i = 0; i < N; i++)
     {
-        int tmp_t = 0;
+        ll tmp = 0;
         for (int j = 0; j < N; j++)
         {
-            tmp_t = max(tmp_t, perm[i][j]);
+            tmp = max(tmp, dist[i][j]);
         }
-        max_t = min(tmp_t, max_t);
+        ans = min(ans, tmp);
     }
 
-    cout << max_t << endl;
+    cout << ans << endl;
     return 0;
 }

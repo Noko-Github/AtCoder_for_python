@@ -1,107 +1,81 @@
 #include <bits/stdc++.h>
-#define rep(i, n) for (int i = 0; i < n; i++)
 using namespace std;
 using P = pair<int, int>;
 
-const int dy[4] = {1, 0, -1, 0};
-const int dx[4] = {0, 1, 0, -1};
+const int MAX_H = 50;
+const int MAX_W = 50;
+string field[MAX_H];
+int dist[MAX_H][MAX_W];
+int H, W;
 
-int main()
+int dy[4] = {0, 1, -1, 0};
+int dx[4] = {1, 0, 0, -1};
+
+bool bfs(int x, int y)
 {
-    int H, W;
-    cin >> H >> W;
-    vector<string> field(H);
-    rep(i, H) cin >> field[i];
-
-    vector<vector<int>> dist(H, vector<int>(W, -1));
-    vector<vector<P>> prev(H, vector<P>(W));
-
-    int sy, sx = 0;
     queue<P> que;
-    que.push(P(sy, sx));
-    dist[sy][sx] = 0;
-    prev[0][0] = P(-1, -1);
+    que.push(P(y, x));
+
     while (!que.empty())
     {
-        int y, x;
+
         tie(y, x) = que.front();
         que.pop();
+        if (y == H - 1 && x == W - 1)
+            return true;
 
-        int ny, nx;
         for (int i = 0; i < 4; i++)
         {
-            ny = dy[i] + y;
-            nx = dx[i] + x;
+            int ny = dy[i] + y;
+            int nx = dx[i] + x;
 
+            // field外
             if (ny < 0 || ny >= H || nx < 0 || nx >= W || field[ny][nx] == '#')
                 continue;
+            // 既に探索済み
+            if (dist[ny][nx] != -1)
+                continue;
 
-            if (dist[ny][nx] == -1)
-            {
-                dist[ny][nx] = dist[y][x] + 1;
-                que.push(P(ny, nx));
-                prev[ny][nx] = P(y, x);
-            }
+            dist[ny][nx] = dist[y][x] + 1;
+            que.push(P(ny, nx));
         }
     }
 
-    int y = H - 1;
-    int x = W - 1;
-    vector<P> short_root;
-    while (y != -1 && x != -1)
+    return false;
+}
+
+int main()
+{
+    cin >> H >> W;
+    for (int i = 0; i < H; i++)
     {
-        P d = prev[y][x];
-        short_root.push_back(d);
-        tie(y, x) = prev[y][x];
+        cin >> field[i];
     }
 
-    // for (int y = 0; y < H; y++)
-    // {
-    //     for (int x = 0; x < W; x++)
-    //     {
-    //         cout << dist[y][x] << " ";
-    //     }
-    //     cout << endl;
-    // }
-
-    // for (P d : short_root)
-    // {
-    //     int y, x;
-    //     tie(y, x) = d;
-    //     cout << "(y, x): " << y << " " << x << endl;
-    // }
-
-    int ans = 0;
+    // 初期化+黒マスの数をカウント
+    int cnt_white = 0;
     for (int y = 0; y < H; y++)
     {
         for (int x = 0; x < W; x++)
         {
-            if (field[y][x] != '#')
+            dist[y][x] = -1;
+            if (field[y][x] == '.')
             {
-                bool ok = true;
-                for (P d : short_root)
-                {
-                    int ng_y, ng_x;
-                    tie(ng_y, ng_x) = d;
-                    if (ng_y == y && ng_x == x)
-                    {
-                        ok = false;
-                        break;
-                    }
-                }
-                if (ok)
-                    ans++;
+                cnt_white++;
             }
         }
     }
-    if (dist[H - 1][W - 1] == -1)
+
+    // bfs
+    dist[0][0] = 0;
+    if (!bfs(0, 0))
     {
         cout << -1 << endl;
+        return 0;
     }
     else
     {
-
-        cout << ans - 1 << endl;
+        cout << cnt_white - 1 - dist[H - 1][W - 1] << endl;
     }
 
     return 0;
